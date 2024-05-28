@@ -10,7 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "pipex.h"
+
 void	pipex(char *infile, char *outfile, t_cmd *commands)
 {
-
+	return ;
 }
