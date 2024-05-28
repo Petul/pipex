@@ -103,10 +103,19 @@ int	main(int argc, char **argv, char **envp)
 	if (!path)
 		return 1;
 	int i = 0;
+	int j = 0;
 	cmds = parse_commands(argv + 2, 2, path);
 	while (cmds[i].args != NULL)
 	{
-		ft_printf("cmd: %s arg: %s\n", cmds[i].exec_path, cmds[i].args[0]);
+		ft_printf("cmd: %s args: ", cmds[i].exec_path);
+		while (cmds[i].args[j])
+		{
+			ft_printf("%s ", cmds[i].args[j]);
+			j++;
+		}
+		ft_printf("\n");
+
+
 		i++;
 	}
 
