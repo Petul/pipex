@@ -6,7 +6,7 @@
 #    By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/16 09:43:07 by pleander          #+#    #+#              #
-#    Updated: 2024/04/25 14:27:01 by pleander         ###   ########.fr        #
+#    Updated: 2024/05/28 09:20:31 by pleander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,7 +71,8 @@ PRINTF_CFILES := ft_printf/ft_printf.c \
 	ft_printf/plus.c \
 	ft_printf/poundsign.c \
 	ft_printf/field_width.c \
-	ft_printf/space.c
+	ft_printf/space.c \
+	ft_printf/process_spec.c
 PRINTF_OBJECTS := $(PRINTF_CFILES:.c=.o)
 
 GNL := get_next_line/libft_get_next_line.o

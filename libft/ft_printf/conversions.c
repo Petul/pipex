@@ -22,7 +22,7 @@ static int	free_and_return_false(char *num)
 	return (FALSE);
 }
 
-t_bool	convert_char(t_fspec *s, int data, size_t *written)
+t_bool	convert_char(t_fspec *s, int data, t_result *r)
 {
 	char	*str;
 
@@ -37,18 +37,15 @@ t_bool	convert_char(t_fspec *s, int data, size_t *written)
 	if (!str)
 		return (FALSE);
 	if (data == 0 && s->negative_field_width)
-		if (print_char(data, written) == FALSE)
-			return (free_and_return_false(str));
-	if (print_string(str, ft_strlen(str), written) == FALSE)
-		return (free_and_return_false(str));
+		write_char(data, r);
+	write_string(str, ft_strlen(str), r);
 	if (data == 0 && !s->negative_field_width)
-		if (print_char(data, written) == FALSE)
-			return (free_and_return_false(str));
-	free(str);
+		write_char(data, r);
 	return (TRUE);
+	free(str);
 }
 
-t_bool	convert_string(t_fspec *s, char *data, size_t *written)
+t_bool	convert_string(t_fspec *s, char *data, t_result *r)
 {
 	char	*str;
 
@@ -64,13 +61,12 @@ t_bool	convert_string(t_fspec *s, char *data, size_t *written)
 	str = apply_field_width(s, str);
 	if (!str)
 		return (free_and_return_false(str));
-	if (print_string(str, ft_strlen(str), written) == FALSE)
-		return (free_and_return_false(str));
+	write_string(str, ft_strlen(str) + 1, r);
 	free(str);
 	return (TRUE);
 }
 
-t_bool	convert_pointer(t_fspec *s, char *data, size_t *written)
+t_bool	convert_pointer(t_fspec *s, char *data, t_result *r)
 {
 	char	*num;
 
@@ -84,13 +80,12 @@ t_bool	convert_pointer(t_fspec *s, char *data, size_t *written)
 	num = apply_field_width(s, num);
 	if (!num)
 		return (FALSE);
-	if (print_string(num, ft_strlen(num), written) == FALSE)
-		return (free_and_return_false(num));
+	write_string(num, ft_strlen(num), r);
 	free(num);
 	return (TRUE);
 }
 
-t_bool	convert_decimal(t_fspec *s, int data, size_t *written)
+t_bool	convert_decimal(t_fspec *s, int data, t_result *r)
 {
 	char	*num;
 
@@ -109,8 +104,7 @@ t_bool	convert_decimal(t_fspec *s, int data, size_t *written)
 	num = apply_field_width(s, num);
 	if (!num)
 		return (FALSE);
-	if (print_string(num, ft_strlen(num), written) == FALSE)
-		return (free_and_return_false(num));
+	write_string(num, ft_strlen(num), r);
 	free(num);
 	return (TRUE);
 }

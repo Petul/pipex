@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/libft.h"
+#include "../include/ft_printf.h"
 
 void	float_sign(char *num)
 {
@@ -55,4 +56,11 @@ int	only_zero_or_space(char *num)
 		num++;
 	}
 	return (1);
+}
+
+void	init_t_result(char *output, size_t buf_size, t_result *res)
+{
+	res->buffer = output;
+	res->buf_size = buf_size;
+	res->written = 0;
 }
