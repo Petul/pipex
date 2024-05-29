@@ -13,6 +13,9 @@
 #ifndef PIPEX_H
 # define PIPEX_H
 
+# define STDIN 0
+# define STDOUT 1
+
 #include <stddef.h>
 
 typedef struct s_cmd
@@ -21,7 +24,17 @@ typedef struct s_cmd
 	char	**args;
 }	t_cmd;
 
+typedef struct s_context
+{
+	char	*infile;
+	char	*outfile;
+	char	**envp;
+	size_t	n_cmds;
+}			t_context;
+
+void	pipex(t_context *con, t_cmd *cmds);
 void	clear_cmd_array(t_cmd *arr);
 size_t	len2d(void **arr);
+void	print_commands(t_cmd *cmds);
 
 #endif

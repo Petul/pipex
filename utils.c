@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "libft/include/ft_printf.h"
 #include "pipex.h"
 
 void	clear_cmd_array(t_cmd *arr)
@@ -33,4 +34,26 @@ size_t	len2d(void **arr)
 	while (arr[len])
 		len++;
 	return (len);
+}
+
+void	print_commands(t_cmd *cmds)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (cmds[i].args != NULL)
+	{
+		ft_printf("cmd: %s args: ", cmds[i].exec_path);
+		j = 0;
+		while (cmds[i].args[j])
+		{
+			ft_printf("%s ", cmds[i].args[j]);
+			j++;
+		}
+		ft_printf("\n");
+
+
+		i++;
+	}
 }

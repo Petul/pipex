@@ -48,7 +48,7 @@ char	*find_path(char *p, char **path)
 t_cmd	*parse_commands(char **args, int n_cmds, char **path)
 {
 	int		i;
-	int		j;
+	size_t	j;
 	size_t	len;
 	char	**split_cmd;
 	t_cmd	*cmds;
@@ -70,16 +70,17 @@ t_cmd	*parse_commands(char **args, int n_cmds, char **path)
 			return (NULL);
 		}
 		len = len2d((void *)split_cmd);
-		cmds[i].args = ft_calloc(len, sizeof(char *));
+		cmds[i].args = ft_calloc(len + 2, sizeof(char *));
 		if (cmds[i].args == NULL)
 		{
 			clear_cmd_array(cmds);
 			return (NULL);
 		}
+		cmds[i].args[0] = ft_strdup(cmds[i].exec_path);
 		j = 1;
 		while (j < len)
 		{
-			cmds[i].args[j - 1] = split_cmd[j];
+			cmds[i].args[j] = split_cmd[j];
 			j++;
 		}
 		free(split_cmd);
@@ -90,34 +91,22 @@ t_cmd	*parse_commands(char **args, int n_cmds, char **path)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*infile;
-	char	*outfile;
 	char	**path;
 	t_cmd	*cmds;
+	t_context con;
 
 	if (argc < 5)
 		return (1);
-	infile = argv[1];
-	outfile = argv[argc];
+	con.infile = argv[1];
+	con.outfile = argv[argc - 1];
+	con.n_cmds = 2;
 	path = get_exec_path(envp);
 	if (!path)
 		return 1;
-	int i = 0;
-	int j = 0;
-	cmds = parse_commands(argv + 2, 2, path);
-	while (cmds[i].args != NULL)
-	{
-		ft_printf("cmd: %s args: ", cmds[i].exec_path);
-		while (cmds[i].args[j])
-		{
-			ft_printf("%s ", cmds[i].args[j]);
-			j++;
-		}
-		ft_printf("\n");
-
-
-		i++;
-	}
-
+	cmds = parse_commands(argv + 2, con.n_cmds, path);
+	//print_commands(cmds);
+	pipex(&con, cmds);
+	clear_cmd_array(cmds);
+	return (0);
 }
 
