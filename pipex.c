@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:35:34 by pleander          #+#    #+#             */
-/*   Updated: 2024/05/24 15:49:17 by pleander         ###   ########.fr       */
+/*   Updated: 2024/05/30 09:17:24 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,18 @@ void	pipex(t_context *con, t_cmd *cmds)
 {
 	int read_fd;
 	int	write_fd;
-	int	fd[con->n_cmds - 1][2];
+	int	**fd;
 	size_t	i;
 	pid_t pid;
-
+	
 	read_fd = open(con->infile, O_RDONLY);
 	write_fd = open(con->outfile, O_WRONLY | O_CREAT);
 	if (read_fd < 0 || write_fd < 0)
 		return ;
 	i = 0;
-	while (i < con->n_cmds - 1)
-	{
-		if (pipe(fd[i]) == -1) //Data written on 1 can be read from 0
-			return ;
-		i++;
-	}
+	fd = create_pipes(con->n_cmds - 1);
+	if (!fd)
+		return ; //error
 	i = 0;
 	while (i < con->n_cmds)
 	{
@@ -58,7 +55,6 @@ void	pipex(t_context *con, t_cmd *cmds)
 			else
 				dup2(fd[i][1], STDOUT);
 			execve(cmds[i].exec_path, cmds[i].args, con->envp);
-			//error if reach here
 			break ;
 		}
 		waitpid(pid, NULL, 0);
@@ -66,6 +62,7 @@ void	pipex(t_context *con, t_cmd *cmds)
 			close(fd[i][1]);
 		i++;
 	}
+	delete_pipes(fd, con->n_cmds - 1);
 	close(read_fd);
 	close(write_fd);
 	return ;

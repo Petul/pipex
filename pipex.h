@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:13:19 by pleander          #+#    #+#             */
-/*   Updated: 2024/05/24 15:49:29 by pleander         ###   ########.fr       */
+/*   Updated: 2024/05/30 09:06:47 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,7 @@ void	pipex(t_context *con, t_cmd *cmds);
 void	clear_cmd_array(t_cmd *arr);
 size_t	len2d(void **arr);
 void	print_commands(t_cmd *cmds);
+int		**create_pipes(size_t n_pipes);
+void	delete_pipes(int **pipes, size_t n_pipes);
 
 #endif
