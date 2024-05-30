@@ -13,31 +13,34 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
-#include "libft/include/ft_printf.h"
 #include "pipex.h"
 
-void	child(t_cmd *cmd, char **envp)
-{
-		ft_printf("Running %s\n", cmd->exec_path);
-		execve(cmd->exec_path, cmd->args, envp);
-}
+static void	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes);
 
 void	pipex(t_context *con, t_cmd *cmds)
 {
-	int read_fd;
-	int	write_fd;
-	int	**fd;
-	size_t	i;
-	pid_t pid;
+	int file_fds[2];
+	int	**pipes;
 	
-	read_fd = open(con->infile, O_RDONLY);
-	write_fd = open(con->outfile, O_WRONLY | O_CREAT);
-	if (read_fd < 0 || write_fd < 0)
+	file_fds[0] = open(con->infile, O_RDONLY);
+	file_fds[1] = open(con->outfile, O_WRONLY | O_CREAT);
+	if (file_fds[0] < 0 || file_fds[1] < 0)
 		return ;
-	i = 0;
-	fd = create_pipes(con->n_cmds - 1);
-	if (!fd)
+	pipes = create_pipes(con->n_cmds - 1);
+	if (!pipes)
 		return ; //error
+	exec_cmds(con, cmds, file_fds, pipes);
+	delete_pipes(pipes, con->n_cmds - 1);
+	close(file_fds[0]);
+	close(file_fds[1]);
+	return ;
+}
+
+static void	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes)
+{
+	size_t i;
+	pid_t pid;
+
 	i = 0;
 	while (i < con->n_cmds)
 	{
@@ -45,25 +48,19 @@ void	pipex(t_context *con, t_cmd *cmds)
 		if (pid == 0)
 		{
 			if (i == 0)
-				dup2(read_fd, STDIN); //second argumet is the id of the duplicate file descriptor. Duplicates first argument
+				dup2(file_fds[0], STDIN); //second argumet is the id of the duplicate file descriptor. Duplicates first argument
 			else
-				dup2(fd[i - 1][0], STDIN); //second argumet is the id of the duplicate file descriptor. Duplicates first argument
+				dup2(pipes[i - 1][0], STDIN); //second argumet is the id of the duplicate file descriptor. Duplicates first argument
 			if (i == con->n_cmds - 1)
-			{
-				dup2(write_fd, STDOUT);
-			}
+				dup2(file_fds[1], STDOUT);
 			else
-				dup2(fd[i][1], STDOUT);
+				dup2(pipes[i][1], STDOUT);
 			execve(cmds[i].exec_path, cmds[i].args, con->envp);
 			break ;
 		}
 		waitpid(pid, NULL, 0);
 		if (i != con->n_cmds - 1)
-			close(fd[i][1]);
+			close(pipes[i][1]);
 		i++;
 	}
-	delete_pipes(fd, con->n_cmds - 1);
-	close(read_fd);
-	close(write_fd);
-	return ;
 }
