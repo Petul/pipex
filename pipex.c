@@ -13,6 +13,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
+#include <sys/errno.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "pipex.h"
 
 static void	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes);
@@ -23,9 +26,12 @@ void	pipex(t_context *con, t_cmd *cmds)
 	int	**pipes;
 	
 	file_fds[0] = open(con->infile, O_RDONLY);
-	file_fds[1] = open(con->outfile, O_WRONLY | O_CREAT);
+	file_fds[1] = open(con->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file_fds[0] < 0 || file_fds[1] < 0)
+	{
+		//perror("pipex")
 		return ;
+	}
 	pipes = create_pipes(con->n_cmds - 1);
 	if (!pipes)
 		return ; //error
@@ -55,8 +61,13 @@ static void	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes)
 				dup2(file_fds[1], STDOUT);
 			else
 				dup2(pipes[i][1], STDOUT);
-			execve(cmds[i].exec_path, cmds[i].args, con->envp);
-			break ;
+			if (execve(cmds[i].exec_path, cmds[i].args, con->envp) == -1)
+			{
+				printf("Error");
+				perror(NULL);
+				//exit(EXIT_FAILURE);
+				//Catch that error has occurred, free memory and stop execution
+			}
 		}
 		waitpid(pid, NULL, 0);
 		if (i != con->n_cmds - 1)

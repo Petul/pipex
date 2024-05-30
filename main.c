@@ -25,28 +25,6 @@ char **get_exec_path(char **envp)
 	return (ft_split((*envp) + 5, ':'));
 }
 
-// char	*find_path(char *p, char **path)
-// {
-// 	char	*check_path;
-// 	char	*p2;
-//
-// 	while (*path)
-// 	{
-// 		check_path = ft_strjoin(*path, "/");
-// 		if (!check_path)
-// 			return (NULL);
-// 		p2 = ft_strjoin(check_path, p);
-// 		free(check_path);
-// 		if (!p2)
-// 			return (NULL);
-// 		if (access(p2, F_OK) == 0)
-// 			return (p2);
-// 		free(p2);
-// 		path++;
-// 	}
-// 	return (NULL);
-// }
-
 char	*find_path(char *p, char **path)
 {
 	char *check_path;
