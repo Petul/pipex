@@ -21,6 +21,7 @@ void	clear_cmd_array(t_cmd *arr)
 			free(arr[i].exec_path);
 		i++;
 	}
+	free(arr);
 	return ;
 }
 
@@ -34,6 +35,19 @@ size_t	len2d(void **arr)
 	while (arr[len])
 		len++;
 	return (len);
+}
+
+void	free_2d_arr(void **arr, size_t len)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < len)
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
 }
 
 void	print_commands(t_cmd *cmds)
