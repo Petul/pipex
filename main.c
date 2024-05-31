@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:01:30 by pleander          #+#    #+#             */
-/*   Updated: 2024/05/30 09:46:57 by pleander         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:10:10 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char **get_exec_path(char **envp)
 char	*find_path(char *p, char **path)
 {
 	char *check_path;
-	size_t path_len;
+	int path_len;
 
 	while (*path)
 	{
@@ -68,6 +68,8 @@ t_cmd	*parse_commands(char **args, int n_cmds, char **path)
 		cmds[i].exec_path = find_path(split_cmd[0], path);
 		if (!cmds[i].exec_path)
 		{
+			ft_dprintf(STDERR, "%s: %s: %s\n", NAME, split_cmd[0], ERR_CMD_NOT_FOUND);
+			free_2d_arr((void *)split_cmd, len2d((void *)split_cmd));
 			clear_cmd_array(cmds);
 			return (NULL);
 		}
@@ -97,6 +99,7 @@ int	main(int argc, char **argv, char **envp)
 	char	**path;
 	t_cmd	*cmds;
 	t_context con;
+	int		retval;
 
 	if (argc < 5)
 		return (1);
@@ -107,10 +110,14 @@ int	main(int argc, char **argv, char **envp)
 	if (!path)
 		return (1);
 	cmds = parse_commands(argv + 2, con.n_cmds, path);
+	if (!cmds)
+	{
+		free_2d_arr((void **)path, len2d((void **)path));
+		return (1);
+	}
 	free_2d_arr((void **)path, len2d((void **)path));
-	//print_commands(cmds);
-	pipex(&con, cmds);
+	retval = pipex(&con, cmds);
 	clear_cmd_array(cmds);
-	return (0);
+	return (retval);
 }
 

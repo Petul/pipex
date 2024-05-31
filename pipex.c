@@ -6,43 +6,40 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:35:34 by pleander          #+#    #+#             */
-/*   Updated: 2024/05/30 09:17:24 by pleander         ###   ########.fr       */
+/*   Updated: 2024/05/31 10:48:53 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include <fcntl.h>
 #include <sys/wait.h>
-#include <sys/errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "pipex.h"
+#include "libft/include/ft_printf.h"
 
-static void	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes);
+static int	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes);
 
-void	pipex(t_context *con, t_cmd *cmds)
+int	pipex(t_context *con, t_cmd *cmds)
 {
 	int file_fds[2];
 	int	**pipes;
+	int retval;
 	
-	file_fds[0] = open(con->infile, O_RDONLY);
-	file_fds[1] = open(con->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (file_fds[0] < 0 || file_fds[1] < 0)
-	{
-		//perror("pipex")
-		return ;
-	}
+	if (open_fds(file_fds, con->infile, con->outfile) < 0)
+		return (1);
 	pipes = create_pipes(con->n_cmds - 1);
 	if (!pipes)
-		return ; //error
-	exec_cmds(con, cmds, file_fds, pipes);
-	delete_pipes(pipes, con->n_cmds - 1);
-	close(file_fds[0]);
-	close(file_fds[1]);
-	return ;
-}
+	{
+		close_fds(file_fds);
+		return (1);
+	}
+	retval = exec_cmds(con, cmds, file_fds, pipes);
 
-static void	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes)
+	delete_pipes(pipes, con->n_cmds - 1);
+	close_fds(file_fds);
+	return (retval);
+}
+static int	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes)
 {
 	size_t i;
 	pid_t pid;
@@ -63,10 +60,8 @@ static void	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes)
 				dup2(pipes[i][1], STDOUT);
 			if (execve(cmds[i].exec_path, cmds[i].args, con->envp) == -1)
 			{
-				printf("Error");
-				perror(NULL);
-				//exit(EXIT_FAILURE);
-				//Catch that error has occurred, free memory and stop execution
+				perror(NAME);
+				return (1);
 			}
 		}
 		waitpid(pid, NULL, 0);
@@ -74,4 +69,5 @@ static void	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes)
 			close(pipes[i][1]);
 		i++;
 	}
+	return (0);
 }

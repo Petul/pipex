@@ -6,12 +6,13 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 08:56:31 by pleander          #+#    #+#             */
-/*   Updated: 2024/05/30 09:16:17 by pleander         ###   ########.fr       */
+/*   Updated: 2024/05/31 10:31:15 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "pipex.h"
 
 int **create_pipes(size_t n_pipes)
@@ -34,6 +35,7 @@ int **create_pipes(size_t n_pipes)
 		}
 		if (pipe(pipes[i]) == -1)
 		{
+			perror(NAME);
 			delete_pipes(pipes, i);
 			return (NULL);
 		}
