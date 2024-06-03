@@ -25,22 +25,17 @@ void	close_fds(int file_fds[2])
 
 int	open_fds(int file_fds[2], char *infile, char *outfile)
 {
-	char	*err;
-
 	file_fds[0] = open(infile, O_RDONLY);
-	if (file_fds[0] < 0)
-	{
-		err = strerror(errno);
-		ft_dprintf(STDERR, "%s: %s: %s\n", NAME, infile, err);
-		return (-1);
-	}
 	file_fds[1] = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (file_fds[1] < 0)
+	if (file_fds[0] < 0 || file_fds[1] < 0)
 	{
-		close(file_fds[0]);
-		err = strerror(errno);
-		ft_dprintf(STDERR, "%s: %s: %s\n", NAME, outfile, err);
-		return (-1);
+		if (file_fds[0] < 0)
+			ft_dprintf(STDERR, "%s: %s: %s\n", NAME, infile, strerror(errno));
+		if (file_fds[1] < 0)
+			ft_dprintf(STDERR, "%s: %s: %s\n", NAME, outfile, strerror(errno));
+		if (file_fds[1] < 0)
+			return (-1);
+		return (0);
 	}
 	return (1);
 }

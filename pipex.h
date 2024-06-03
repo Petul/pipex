@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:13:19 by pleander          #+#    #+#             */
-/*   Updated: 2024/05/31 10:37:08 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/03 09:53:26 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,13 @@ typedef struct s_context
 	char	*infile;
 	char	*outfile;
 	char	**envp;
+	char	**args;
+	char	**path;
 	size_t	n_cmds;
 }			t_context;
 
-int		pipex(t_context *con, t_cmd *cmds);
+int		pipex(t_context *con);
+t_cmd	*parse_commands(char **args, int n_cmds, char **path);
 void	clear_cmd_array(t_cmd *arr);
 size_t	len2d(void **arr);
 void	print_commands(t_cmd *cmds);
