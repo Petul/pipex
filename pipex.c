@@ -53,7 +53,7 @@ static int	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes)
 {
 	size_t	i;
 	pid_t	*pids;
-	int stat_loc;
+	//int stat_loc;
 
 	pids = ft_calloc(con->n_cmds + 1, sizeof(pid_t));
 	//protect
@@ -65,35 +65,48 @@ static int	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes)
 		{
 			if (i == 0)
 			{
-				if (file_fds[0] < 0)
-					exit(1);
+				// if (file_fds[0] < 0)
+				// 	exit(1);
 				dup2(file_fds[0], STDIN); //second argumet is the id of the duplicate file descriptor. Duplicates first argument
+				close(file_fds[0]);
 			}
 			else
+			{
 				dup2(pipes[i - 1][0], STDIN); //second argumet is the id of the duplicate file descriptor. Duplicates first argument
+				close(pipes[i - 1][0]);
+			}
 			if (i == con->n_cmds - 1)
 			{
-				if (file_fds[1] < 0)
-					exit(1);
+				// if (file_fds[1] < 0)
+				// 	exit(1);
 				dup2(file_fds[1], STDOUT);
+				close(file_fds[1]);
 			}
 			else
+			{
 				dup2(pipes[i][1], STDOUT);
+				close(pipes[i][1]);
+			}
 			if (execve(cmds[i].exec_path, cmds[i].args, con->envp) == -1)
-			// {
-			// 	close(pipes[i][1]);
-			// 	if (errno == ENOENT)
-			// 	 	ft_dprintf(STDERR, "%s: %s: %s\n", NAME, "", ERR_CMD_NOT_FOUND);
-			// 	else
-			// 		perror(NAME);
-			// }
-			exit(1);
+			{
+				exit(1);
+				// close(pipes[i][1]);
+				// if (errno == ENOENT)
+				//  	ft_dprintf(STDERR, "%s: %s: %s\n", NAME, "", ERR_CMD_NOT_FOUND);
+				// else
+				// 	perror(NAME);
+			}
 		}
+		ft_printf("Started process %d with pid %d\n", i, pids[i]);
 		i++;
 	}
 	i = 0;
-	// STORE PIDS TOGETHER WITH THE PROCESSES FD_S AND USED PIPES. CLOSE ASSOCIATED STUFF AT EXIT.
-	pid_t pid = wait(&stat_loc);
-	pid = wait(&stat_loc);
+	close(file_fds[0]);
+	close(file_fds[1]);
+	close(pipes[0][1]);
+	close(pipes[0][1]);
+	pid_t pid = wait(NULL);
+	ft_printf("Process with pid %d exited\n", pid);
+	pid = wait(NULL);
 	return (0);
 }
