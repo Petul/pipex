@@ -17,7 +17,8 @@
 # define STDOUT 1
 # define STDERR 2
 # define NAME "pipex"
-# define ERR_CMD_NOT_FOUND "command not found"
+# define STR_CMD_NOT_FOUND "command not found"
+# define CODE_CMD_NOT_FOUND 127
 
 # include <stddef.h>
 

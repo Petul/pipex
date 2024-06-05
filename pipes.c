@@ -51,6 +51,8 @@ void	delete_pipes(int **pipes, size_t n_pipes)
 	i = 0;
 	while (i < n_pipes)
 	{
+		close(pipes[i][0]);
+		close(pipes[i][1]);
 		free(pipes[i]);
 		i++;
 	}

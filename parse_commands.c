@@ -36,7 +36,8 @@ static char	*find_path(char *p, char **path)
  		free(check_path);
  		path++;
 	}
-	return ("");
+	check_path = ft_strdup(p);
+	return (check_path);
 }
 
 t_cmd	*parse_commands(char **args, int n_cmds, char **path)
