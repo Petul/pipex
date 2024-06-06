@@ -6,14 +6,14 @@
 #    By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/31 14:22:58 by pleander          #+#    #+#              #
-#    Updated: 2024/06/03 10:46:19 by pleander         ###   ########.fr        #
+#    Updated: 2024/06/06 15:51:11 by pleander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := pipex
 CC := cc
 CFLAGS := -Wall -Wextra -Werror
-CFILES := pipex.c parse_commands.c pipes.c utils.c fd.c main.c
+CFILES := pipex.c parse_commands.c pipes.c utils.c fd.c child.c main.c
 
 LIBFT := libft/libft.a
 
