@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:35:34 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/03 10:55:07 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/06 15:44:53 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,106 +18,96 @@
 #include "pipex.h"
 #include "libft/include/ft_printf.h"
 
-static int	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes);
+static int	exec_cmds(t_context *con, t_cmd *cmds, t_fds *fds);
+static int	wait_for_children(int *pid, size_t n_forks);
 
+// pid_t my_fork(void)
+// {
+// 	static int i = 0;
+//
+// 	 if (i == 1)
+// 	 {
+// 	 	i++;
+// 	 	return (-1);
+// 	 }
+// 	 i++;
+// 	 return (fork());
+// }
+//
+// #define fork my_fork
+//
 int	pipex(t_context *con)
 {
-	int		file_fds[2];
-	int		**pipes;
+	t_fds	fds;
 	int		retval;
 	t_cmd	*cmds;
 	
-	// if (open_fds(file_fds, con->infile, con->outfile) < 0)
-	// 	return (1);
-	open_fds(file_fds, con->infile, con->outfile);
+	open_fds(fds.file_fds, con->infile, con->outfile);
 	cmds = parse_commands(con->args, con->n_cmds, con->path);
 	if (!cmds)
 	{
-		close_fds(file_fds);
+		close_fds(fds.file_fds);
 		return (1);
 	}
-	pipes = create_pipes(con->n_cmds - 1);
-	if (!pipes)
+	fds.pipes = create_pipes(con->n_cmds - 1);
+	if (!fds.pipes)
 	{
 		clear_cmd_array(cmds);
-		close_fds(file_fds);
+		close_fds(fds.file_fds);
 		return (1);
 	}
-	retval = exec_cmds(con, cmds, file_fds, pipes);
+	retval = exec_cmds(con, cmds, &fds);
 	clear_cmd_array(cmds);
 	return (retval);
 }
-static int	exec_cmds(t_context *con, t_cmd *cmds, int file_fds[2], int **pipes)
-{
-	size_t	i;
-	int		stat_loc;
-	pid_t	*pid;
 
-	pid = malloc(sizeof(pid_t) * con->n_cmds);
-	i = 0;
-	while (i < con->n_cmds)
+static int	exec_cmds(t_context *con, t_cmd *cmds, t_fds *fds)
+{
+	t_children	children;
+	int			e_status;
+	
+	children.child_pids = malloc(sizeof(pid_t) * con->n_cmds);
+	children.n_children = 0;
+	while (children.n_children < con->n_cmds)
 	{
-		pid[i] = fork();
-		if (pid[i] == 0)
+		children.child_pids[children.n_children] = fork();
+		if (children.child_pids[children.n_children] == 0)
+			spawn_child(fds, con, &children, cmds);
+		if (children.child_pids[children.n_children] == -1)
 		{
-			if (i == 0)
-			{
-				if (file_fds[0] < 0)
-				{
-					delete_pipes(pipes, con->n_cmds - 1);
-					free(pid);
-					return(1);
-				}
-				dup2(file_fds[0], STDIN); //second argumet is the id of the duplicate file descriptor. Duplicates first argument
-			}
-			else
-				dup2(pipes[i - 1][0], STDIN); //second argumet is the id of the duplicate file descriptor. Duplicates first argument
-			if (i == con->n_cmds - 1)
-			{
-				if (file_fds[1] < 0)
-				{
-					delete_pipes(pipes, con->n_cmds - 1);
-					free(pid);
-					return(1);
-				}
-				dup2(file_fds[1], STDOUT);
-			}
-			else
-				dup2(pipes[i][1], STDOUT);
-			delete_pipes(pipes, con->n_cmds - 1);
-			close_fds(file_fds);
-			if (execve(cmds[i].exec_path, cmds[i].args, con->envp) == -1)
-			{
-				close(STDIN);
-				close(STDOUT);
-				if (errno == ENOENT)
-				{
-				 	ft_dprintf(STDERR, "%s: %s: %s\n", NAME, cmds[i].exec_path, STR_CMD_NOT_FOUND);
-					free(pid);
-					return(CODE_CMD_NOT_FOUND);
-				}
-				else
-					perror(NAME);
-			}
-			exit(EXIT_FAILURE);
+			children.n_children++;
+			continue ;
 		}
-		i++;
+		children.n_children++;
 	}
-	delete_pipes(pipes, con->n_cmds - 1);
-	close_fds(file_fds);
-	stat_loc = 0;
-	i = 0;
-	int e_status = 0;
-	while (i < con->n_cmds)
-	{
-		waitpid(pid[i], &stat_loc, 0);
-		if (WIFEXITED(stat_loc))
-		{
-			e_status = WEXITSTATUS(stat_loc);
-		}
-		i++;
-		stat_loc = 0;
-	}
-	free(pid);
+	delete_pipes(fds->pipes, con->n_cmds - 1);
+	close_fds(fds->file_fds);
+	e_status = wait_for_children(children.child_pids, children.n_children);
+	free(children.child_pids);
 	return (e_status);
 }
+
+static int	wait_for_children(int *pid, size_t n_forks)
+{
+	int		wstatus = 0;
+	int		e_status = 0;
+	size_t	i = 0;
+
+	while (i < n_forks)
+	{
+		wstatus = 0;
+		if (pid[i] > 0)
+		{
+			waitpid(pid[i], &wstatus, 0);
+			if (WIFEXITED(wstatus))
+			{
+				e_status = WEXITSTATUS(wstatus);
+			}
+		}
+		else 
+			e_status = EXIT_FAILURE;
+		i++;
+	}
+	return (e_status);
+}
+

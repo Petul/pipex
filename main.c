@@ -24,7 +24,8 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	con.infile = argv[1];
 	con.outfile = argv[argc - 1];
-	con.n_cmds = 2;
+	//con.n_cmds = 2;
+	con.n_cmds = argc - 3;
 	con.envp = envp;
 	con.args = argv + 2;
 	con.path = get_exec_path(envp);
@@ -37,9 +38,14 @@ int	main(int argc, char **argv, char **envp)
 
 static char **get_exec_path(char **envp)
 {
-	while (ft_strncmp(*envp, "PATH=", 5) && *envp != NULL)
+	char	**path;
+	while (*envp != NULL && ft_strncmp(*envp, "PATH=", 5))
 		envp++;
 	if (*envp == NULL)
+		path = ft_split("", 0);
+	else 
+		path = ft_split((*envp) + 5, ':');
+	if (!path)
 		return (NULL);
-	return (ft_split((*envp) + 5, ':'));
+	return (path);
 }

@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:34:47 by pleander          #+#    #+#             */
-/*   Updated: 2024/05/31 15:06:30 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/06 15:47:01 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int	open_fds(int file_fds[2], char *infile, char *outfile)
 	if (file_fds[0] < 0 || file_fds[1] < 0)
 	{
 		if (file_fds[0] < 0)
-			ft_dprintf(STDERR, "%s: %s: %s\n", NAME, infile, strerror(errno));
+			ft_dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME, infile, strerror(errno));
 		if (file_fds[1] < 0)
-			ft_dprintf(STDERR, "%s: %s: %s\n", NAME, outfile, strerror(errno));
+			ft_dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME, outfile, strerror(errno));
 		if (file_fds[1] < 0)
 			return (-1);
 		return (0);

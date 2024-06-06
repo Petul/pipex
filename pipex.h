@@ -6,21 +6,19 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:13:19 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/03 09:53:26 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/06 15:46:34 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
-# define STDIN 0
-# define STDOUT 1
-# define STDERR 2
 # define NAME "pipex"
 # define STR_CMD_NOT_FOUND "command not found"
 # define CODE_CMD_NOT_FOUND 127
 
 # include <stddef.h>
+# include <sys/wait.h>
 
 typedef struct s_cmd
 {
@@ -38,6 +36,18 @@ typedef struct s_context
 	size_t	n_cmds;
 }			t_context;
 
+typedef struct s_children
+{
+	pid_t	*child_pids;
+	size_t	n_children;
+}	t_children;
+
+typedef struct s_fds
+{
+	int		**pipes;
+	int		file_fds[2];	
+}	t_fds;
+
 int		pipex(t_context *con);
 t_cmd	*parse_commands(char **args, int n_cmds, char **path);
 void	clear_cmd_array(t_cmd *arr);
@@ -48,5 +58,6 @@ void	delete_pipes(int **pipes, size_t n_pipes);
 void	free_2d_arr(void **arr, size_t len);
 int		open_fds(int file_fds[2], char *infile, char *outfile);
 void	close_fds(int file_fds[2]);
+int		spawn_child(t_fds *fds, t_context *con, t_children *children, t_cmd *cmds);
 
 #endif
