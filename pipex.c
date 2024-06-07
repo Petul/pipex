@@ -44,6 +44,7 @@ int	pipex(t_context *con)
 	
 	open_fds(fds.file_fds, con->infile, con->outfile);
 	cmds = parse_commands(con->args, con->n_cmds, con->path);
+	print_commands(cmds);
 	if (!cmds)
 	{
 		close_fds(fds.file_fds);
@@ -72,7 +73,7 @@ static int	exec_cmds(t_context *con, t_cmd *cmds, t_fds *fds)
 	{
 		children.child_pids[children.n_children] = fork();
 		if (children.child_pids[children.n_children] == 0)
-			spawn_child(fds, con, &children, cmds);
+			return (spawn_child(fds, con, &children, cmds));
 		if (children.child_pids[children.n_children] == -1)
 		{
 			children.n_children++;

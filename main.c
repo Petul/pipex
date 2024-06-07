@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft/include/ft_printf.h"
 #include "pipex.h"
 #include "libft/include/libft.h"
 
@@ -20,6 +21,13 @@ int	main(int argc, char **argv, char **envp)
 	t_context con;
 	int		retval;
 
+	int i = 0;
+	while (i < argc)
+	{
+		ft_printf("%s, ", argv[i]);
+		i++;
+	}
+	ft_printf("\n");
 	if (argc < 5)
 		return (1);
 	con.infile = argv[1];

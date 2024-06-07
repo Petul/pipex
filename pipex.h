@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:13:19 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/06 15:46:34 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/07 14:38:35 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,6 @@ void	free_2d_arr(void **arr, size_t len);
 int		open_fds(int file_fds[2], char *infile, char *outfile);
 void	close_fds(int file_fds[2]);
 int		spawn_child(t_fds *fds, t_context *con, t_children *children, t_cmd *cmds);
+char	**argv_split(char *args);
 
 #endif
