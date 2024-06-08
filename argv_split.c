@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/07 13:39:02 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/07 17:21:48 by pleander         ###   ########.fr       */
+/*   Created: 2024/06/08 10:10:07 by pleander          #+#    #+#             */
+/*   Updated: 2024/06/08 10:52:06 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <stdlib.h>
 #include "libft/include/libft.h"
 #include "libft/include/ft_printf.h"
@@ -64,7 +65,7 @@ char	**argv_split(char *args)
 	char **split;
 	int		n_args;
 	int		c;
-	int		i;
+	size_t		i;
 
 	n_args = count_args(args);
 	split = ft_calloc(n_args + 1, sizeof(char *));
@@ -72,19 +73,21 @@ char	**argv_split(char *args)
 		return (NULL);
 	i = 0;
 	c = 0;
-	while (args[i])
+	while (args[i] == ' ')
+		i++;
+	while (i < ft_strlen(args) && c < n_args)
 	{
 		if (args[i] == '\'' || args[i] == '\"')
 		{
 			char *q = ft_calloc(2, sizeof(char));
 			q[0] = args[i];
-			split[c] = ft_strcdup(args + i, q);
+			split[c] = ft_strcdup(args + i + 1, q);
 			if (!split[c])
 			{
 				//free_array
-			return (NULL);
+				return (NULL);
 			}
-			i += ft_strlen(split[c]);
+			i += ft_strlen(split[c]) + 2;
 			c++;
 		}
 		else
@@ -95,11 +98,11 @@ char	**argv_split(char *args)
 				//free array
 				return (NULL);
 			}
-			i += ft_strlen(split[c]);
+			i += ft_strlen(split[c]) + 1;
 			c++;
 		} 
-		i++;
+		while (args[i] == ' ')
+			i++;
 	}
-	ft_printf("N arguments: %d\n", n_args);
 	return (split);
 }
