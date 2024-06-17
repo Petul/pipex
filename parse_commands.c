@@ -60,22 +60,11 @@ static char	*find_path(char *p, char **path)
 
 static char	**extract_arguments(char *arg)
 {
-	//char	**args;
-	//char	*prog_name;
-	//size_t	i;
-
-	//prog_name = extract_prog(arg, &i);
-	// if (!prog_name)
-	// 	return (NULL);
 	char **split = (argv_split(arg));
-	int i = 0;
-	ft_printf("Arguments: ");
-	while (split[i])
-	{
-		ft_printf("%s, ", split[i]);
-		i++;
-	}
-	return (ft_split(arg, ' '));
+	
+	if (!split)
+		return (NULL);
+	return (split);
 }
 
 t_cmd	*parse_commands(char **args, int n_cmds, char **path)

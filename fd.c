@@ -25,7 +25,10 @@ void	close_fds(int file_fds[2])
 
 int	open_fds(int file_fds[2], char *infile, char *outfile)
 {
-	file_fds[0] = open(infile, O_RDONLY);
+	if (!infile)
+		file_fds[0] = STDIN_FILENO;
+	else
+		file_fds[0] = open(infile, O_RDONLY);
 	file_fds[1] = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file_fds[0] < 0 || file_fds[1] < 0)
 	{

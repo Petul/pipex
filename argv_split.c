@@ -6,103 +6,90 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 10:10:07 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/08 10:52:06 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/17 14:08:04 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "libft/include/libft.h"
-#include "libft/include/ft_printf.h"
+#include "pipex.h"
 
-static int	count_args(char *s)
+
+static int	free_and_return_zero(char **split)
 {
-	int	count;
-	int	len;
-	int	i;
-	char c;
-	char q;
+	int i;
 
-	c = ' ';
-	count = 0;
-	i = 0;
-	len = (int)ft_strlen(s);
-	if (len == 0)
+	if (!split)
 		return (0);
-	if (s[i] != c && i == 0)
-		count++;
-	while (i < len - 1)
+	i = 0;
+	while(split[i])
 	{
- 		if (s[i] == '\'' || s[i] == '\"')
-		{
-			q =  s[i];
-			i++;
-			while (s[i] != q)
-				i++;
-		}
-		if (s[i] == c && s[i + 1] != c)
-			count++;
+		free(split[i]);
 		i++;
 	}
-	return (count);
+	return (0);
 }
 
-static char	*ft_strcdup(char *s, char *charset)
+static int	handle_quote(char *args, char **split, size_t *i, int c)
 {
-	char	*dup;
+
+	if (args[*i] == '\'')
+		split[c] = ft_strcdup(args + *i + 1, "\'");
+	else if (args[*i] == '\"')
+		split[c] = ft_strcdup(args + *i + 1, "\"");
+	if (!split[c])
+		free_and_return_zero(split);
+	*i += ft_strlen(split[c]) + 2;
+	return (1);
+}
+
+static void	skip_spaces(char *args, size_t *i)
+{
+	while (args[*i] == ' ')
+		(*i)++;
+}
+
+static int perform_splitting(char *args, int n_args, char **split)
+{
 	size_t	i;
+	int		c;
 
 	i = 0;
-	while (s[i] && !ft_strchr(charset, s[i]))
-		i++;
-	dup = ft_substr(s, 0, i);
-	if (!dup)
-		return (NULL);
-	return (dup);
+	c = 0;
+	skip_spaces(args, &i);
+	while (i < ft_strlen(args) && c < n_args)
+	{
+		if (args[i] == '\'' || args[i] == '\"')
+		{
+			if (handle_quote(args, split, &i, c) == 0)
+				free_and_return_zero(split);
+		}
+		else
+		{
+			split[c] = ft_strcdup(args + i, " \'\"");
+			if (!split[c])
+				free_and_return_zero(split);
+			i += ft_strlen(split[c]) + 1;
+		} 
+		c++;
+	skip_spaces(args, &i);
+	}
+	return (1);
 }
 
 char	**argv_split(char *args)
 {
 	char **split;
 	int		n_args;
-	int		c;
-	size_t		i;
 
 	n_args = count_args(args);
 	split = ft_calloc(n_args + 1, sizeof(char *));
 	if (!split)
 		return (NULL);
-	i = 0;
-	c = 0;
-	while (args[i] == ' ')
-		i++;
-	while (i < ft_strlen(args) && c < n_args)
+	if (!perform_splitting(args, n_args, split))
 	{
-		if (args[i] == '\'' || args[i] == '\"')
-		{
-			char *q = ft_calloc(2, sizeof(char));
-			q[0] = args[i];
-			split[c] = ft_strcdup(args + i + 1, q);
-			if (!split[c])
-			{
-				//free_array
-				return (NULL);
-			}
-			i += ft_strlen(split[c]) + 2;
-			c++;
-		}
-		else
-		{
-			split[c] = ft_strcdup(args + i, " \'\"");
-			if (!split[c])
-			{
-				//free array
-				return (NULL);
-			}
-			i += ft_strlen(split[c]) + 1;
-			c++;
-		} 
-		while (args[i] == ' ')
-			i++;
+		free(split);
+		return (NULL);
 	}
 	return (split);
 }

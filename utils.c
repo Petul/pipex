@@ -62,7 +62,7 @@ void	print_commands(t_cmd *cmds)
 		j = 0;
 		while (cmds[i].args[j])
 		{
-			ft_printf("%s ", cmds[i].args[j]);
+			ft_printf("\"%s\" ", cmds[i].args[j]);
 			j++;
 		}
 		ft_printf("\n");

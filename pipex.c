@@ -6,17 +6,14 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:35:34 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/06 15:44:53 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/17 15:40:04 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
-#include <errno.h>
 #include <sys/wait.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include "pipex.h"
-#include "libft/include/ft_printf.h"
 
 static int	exec_cmds(t_context *con, t_cmd *cmds, t_fds *fds);
 static int	wait_for_children(int *pid, size_t n_forks);
@@ -43,8 +40,9 @@ int	pipex(t_context *con)
 	t_cmd	*cmds;
 	
 	open_fds(fds.file_fds, con->infile, con->outfile);
+	if (con->limiter != NULL)
+		read_heredoc(con->limiter);
 	cmds = parse_commands(con->args, con->n_cmds, con->path);
-	print_commands(cmds);
 	if (!cmds)
 	{
 		close_fds(fds.file_fds);
@@ -68,6 +66,7 @@ static int	exec_cmds(t_context *con, t_cmd *cmds, t_fds *fds)
 	int			e_status;
 	
 	children.child_pids = malloc(sizeof(pid_t) * con->n_cmds);
+	// protect?
 	children.n_children = 0;
 	while (children.n_children < con->n_cmds)
 	{
