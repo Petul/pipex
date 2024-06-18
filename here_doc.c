@@ -12,15 +12,23 @@
 
 #include <unistd.h>
 #include <stdlib.h>
+#include "libft/include/ft_printf.h"
 #include "libft/include/get_next_line.h"
 #include "libft/include/libft.h"
 
-static void	write_to_stdin(void *str)
+static void	write_content_to_fd(t_list *lst, int fd)
 {
-	write(STDIN_FILENO, (char *)str, ft_strlen(str));
+	if (!lst)
+		return ;
+	while (lst->next)
+	{
+		if (write(fd, lst->content, ft_strlen(lst->content)) < 0)
+			ft_dprintf(2,"Write error"); 
+		lst = lst->next;
+	}
 }
 
-void	read_heredoc(char *limiter)
+void	read_heredoc(char *limiter, int write_fd)
 {
 	t_list	*line;
 
@@ -39,7 +47,8 @@ void	read_heredoc(char *limiter)
 			// protect
 		}
 	}
-	ft_lstiter(line, &write_to_stdin);
+	write_content_to_fd(line, write_fd);
+	close(write_fd);
 	ft_lstclear(&line, &free); 
 	return ;
 }

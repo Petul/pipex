@@ -15,6 +15,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include "libft/include/ft_printf.h"
+#include "libft/include/get_next_line.h"
 #include "pipex.h"
 
 static int	child_error_return(int **pipes, t_context *con, t_children *children)

@@ -14,6 +14,7 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include "pipex.h"
+#include "libft/include/ft_printf.h"
 
 static int	exec_cmds(t_context *con, t_cmd *cmds, t_fds *fds);
 static int	wait_for_children(int *pid, size_t n_forks);
@@ -39,9 +40,7 @@ int	pipex(t_context *con)
 	int		retval;
 	t_cmd	*cmds;
 	
-	open_fds(fds.file_fds, con->infile, con->outfile);
-	if (con->limiter != NULL)
-		read_heredoc(con->limiter);
+	open_fds(&fds, con);
 	cmds = parse_commands(con->args, con->n_cmds, con->path);
 	if (!cmds)
 	{
@@ -55,6 +54,8 @@ int	pipex(t_context *con)
 		close_fds(fds.file_fds);
 		return (1);
 	}
+	if (con->limiter)
+		read_heredoc(con->limiter, fds.file_fds[1]); //write heredoc to write end of first pipe
 	retval = exec_cmds(con, cmds, &fds);
 	clear_cmd_array(cmds);
 	return (retval);

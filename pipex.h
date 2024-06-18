@@ -47,6 +47,7 @@ typedef struct s_fds
 {
 	int		**pipes;
 	int		file_fds[2];	
+	int		*heredoc_pipe;
 }	t_fds;
 
 int		pipex(t_context *con);
@@ -56,13 +57,13 @@ size_t	len2d(void **arr);
 void	print_commands(t_cmd *cmds);
 int		**create_pipes(size_t n_pipes);
 void	delete_pipes(int **pipes, size_t n_pipes);
+int		open_fds(t_fds *fds, t_context *con);
 void	free_2d_arr(void **arr, size_t len);
-int		open_fds(int file_fds[2], char *infile, char *outfile);
 void	close_fds(int file_fds[2]);
 int		spawn_child(t_fds *fds, t_context *con, t_children *children, t_cmd *cmds);
 char	**argv_split(char *args);
 char	*ft_strcdup(char *s, char *charset);
 int		count_args(char *s);
-void	read_heredoc(char *limiter);
+void	read_heredoc(char *limiter, int write_fd);
 
 #endif
