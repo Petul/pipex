@@ -16,7 +16,7 @@
 #include <errno.h>
 #include <string.h>
 #include "pipex.h"
-#include "libft/include/ft_printf.h"
+#include "../libft/include/ft_printf.h"
 
 static int	open_file_fds(int file_fds[2], char *infile, char *outfile)
 {

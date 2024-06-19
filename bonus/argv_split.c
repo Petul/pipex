@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "libft/include/libft.h"
+#include "../libft/include/libft.h"
 #include "pipex.h"
 
 static int	free_and_return_zero(char **split)

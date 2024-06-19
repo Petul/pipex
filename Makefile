@@ -28,20 +28,8 @@ LIBFT := libft/libft.a
 
 OBJECTS := $(CFILES:.c=.o)
 
-# BONUS_CFILES := ft_printf_bonus.c \
-# 	ft_utoa_base_bonus.c \
-# 	conversions_bonus.c \
-# 	conversions2_bonus.c \
-# 	parse_conversion_bonus.c \
-# 	precision_bonus.c \
-# 	printers_bonus.c \
-# 	utils_bonus.c \
-# 	plus_bonus.c \
-# 	poundsign_bonus.c \
-# 	field_width_bonus.c \
-# 	space_bonus.c
-
-# BONUS_OBJECTS := $(BONUS_CFILES:.c=.o)
+BONUS_CFILES := $(addprefix bonus/, $(CFILES))
+BONUS_OBJECTS := $(BONUS_CFILES:.c=.o)
 
 .PHONY: all
 all: $(NAME)
@@ -70,14 +58,9 @@ fclean: clean
 .PHONY: re
 re: fclean all
 
-	
+.PHONY: bonus
+bonus: .bonus
 
-	
-	
-# .PHONY: bonus
-# bonus: .bonus
-
-# .bonus: $(LIBFT) $(BONUS_OBJECTS)
-# 	cp $(LIBFT) $(NAME)
-# 	ar rcs $(NAME) $(BONUS_OBJECTS)
-# 	touch .bonus
+.bonus: $(LIBFT) $(BONUS_OBJECTS)
+	$(CC) $(BONUS_OBJECTS) $(LIBFT) -o $(NAME)
+	touch .bonus

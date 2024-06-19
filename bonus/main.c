@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include "libft/include/libft.h"
+#include "../libft/include/libft.h"
 
 static char	**get_exec_path(char **envp);
 static void	get_args(t_context *con, int argc, char **argv);

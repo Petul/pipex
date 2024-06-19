@@ -12,8 +12,8 @@
 
 #include <stdlib.h>
 #include <unistd.h>
-#include "libft/include/ft_printf.h"
-#include "libft/include/libft.h"
+#include "../libft/include/ft_printf.h"
+#include "../libft/include/libft.h"
 #include "pipex.h"
 
 static char	*find_path(char *p, char **path)

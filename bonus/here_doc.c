@@ -12,9 +12,8 @@
 
 #include <unistd.h>
 #include <stdlib.h>
-#include "libft/include/ft_printf.h"
-#include "libft/include/get_next_line.h"
-#include "libft/include/libft.h"
+#include "../libft/include/get_next_line.h"
+#include "../libft/include/libft.h"
 
 static int	write_content_to_fd(t_list *lst, int fd)
 {
