@@ -1,5 +1,7 @@
+infile
+outfile
+pipex
 *.swp
 *.swo
-*.a
 *.o
-libft/.git
+*.a
