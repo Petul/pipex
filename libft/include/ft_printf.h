@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 16:08:41 by pleander          #+#    #+#             */
-/*   Updated: 2024/05/28 09:27:44 by pleander         ###   ########.fr       */
+/*   Updated: 2024/05/31 09:56:08 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,12 @@ typedef struct s_result
 
 int		ft_printf(const char *fstring, ...);
 int		ft_snprintf(char *output, size_t size, const char *fstr, ...);
+int		ft_dprintf(int fd, const char *fstr, ...);
 int		ft_vsnprintf(char *output, size_t size, const char *fstr, va_list args);
 void	write_char(int data, t_result *r);
 void	write_string(char *data, size_t n, t_result *r);
-t_bool	print_char(int data);
-t_bool	print_string(char *data, size_t n);
+t_bool	print_char(int fd, int data);
+t_bool	print_string(int fd, char *data, size_t n);
 t_fspec	*parse_conversion(char *conversion);
 t_bool	convert_char(t_fspec *s, int data, t_result *r);
 t_bool	convert_string(t_fspec *s, char *data, t_result *r);

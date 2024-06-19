@@ -1,31 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_strncat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/18 15:01:07 by pleander          #+#    #+#             */
-/*   Updated: 2024/04/25 13:29:04 by pleander         ###   ########.fr       */
+/*   Created: 2024/05/31 15:19:41 by pleander          #+#    #+#             */
+/*   Updated: 2024/05/31 15:19:43 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdlib.h>
-#include <stdint.h>
-#include "include/libft.h"
 
-
-void	*ft_calloc(size_t count, size_t size)
+char	*ft_strncat(char *dest, char *src, unsigned int nb)
 {
-	void	*alloc;
+	char			*orig;
+	unsigned int	i;
 
-	if (count != 0)
+	i = 0;
+	orig = dest;
+	while (*dest)
 	{
-		if (size > SIZE_MAX / count)
-			return (NULL);
+		dest++;
 	}
-	alloc = malloc(count * size);
-	if (!alloc)
-		return (NULL);
-	ft_bzero(alloc, count * size);
-	return (alloc);
+	while (*src && i < nb)
+	{
+		*dest = *src;
+		dest++;
+		src++;
+		i++;
+	}
+	*dest = '\0';
+	return (orig);
 }

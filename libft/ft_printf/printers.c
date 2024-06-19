@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 13:48:45 by pleander          #+#    #+#             */
-/*   Updated: 2024/05/23 11:43:16 by pleander         ###   ########.fr       */
+/*   Updated: 2024/05/31 10:04:14 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,21 @@ void	write_string(char *data, size_t n, t_result *r)
 	}
 }
 
-t_bool	print_char(int data)
+t_bool	print_char(int fd, int data)
 {
-	if (write(STDOUT, &data, 1) < 0)
+	if (write(fd, &data, 1) < 0)
 		return (FALSE);
 	return (TRUE);
 }
 
-t_bool	print_string(char *data, size_t n)
+t_bool	print_string(int fd, char *data, size_t n)
 {
 	size_t	i;
 
 	i = 0;
 	while (data[i] && i < n)
 	{
-		if (print_char(data[i]) == FALSE)
+		if (print_char(fd, data[i]) == FALSE)
 			return (FALSE);
 		i++;
 	}

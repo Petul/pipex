@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:28:38 by pleander          #+#    #+#             */
-/*   Updated: 2024/05/28 09:28:39 by pleander         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:21:15 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,8 @@
 #  define BUFFER_SIZE 32
 # endif
 
+# define OPEN_MAX 10240
+
 char	*get_next_line(int fd);
-char	*ft_strchr(const char *s, int c);
-size_t	ft_strlen(const char *s);
-void	*ft_memcpy(void *dst, const void *src, size_t n);
-void	*ft_memset(void *b, int c, size_t len);
-char	*ft_strncat(char *dest, char *src, unsigned int nb);
 
 #endif

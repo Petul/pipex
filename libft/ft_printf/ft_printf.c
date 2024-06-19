@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 11:36:42 by pleander          #+#    #+#             */
-/*   Updated: 2024/05/28 09:26:44 by pleander         ###   ########.fr       */
+/*   Updated: 2024/05/31 09:55:49 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,24 @@ int	ft_snprintf(char *output, size_t size, const char *fstr, ...)
 	return (written);
 }
 
+int	ft_dprintf(int fd, const char *fstr, ...)
+{
+	int		written;
+	char	*output;
+	va_list	args;
+
+	va_start(args, fstr);
+	written = ft_vsnprintf((char *) NULL, 0, fstr, args);
+	if (written < 0)
+		return (written);
+	output = ft_calloc(written + 1, sizeof(char));
+	written = ft_vsnprintf(output, written + 1, fstr, args);
+	print_string(fd, output, written);
+	free(output);
+	va_end(args);
+	return (written);
+}
+
 int	ft_printf(const char *fstr, ...)
 {
 	int		written;
@@ -66,7 +84,7 @@ int	ft_printf(const char *fstr, ...)
 		return (written);
 	output = ft_calloc(written + 1, sizeof(char));
 	written = ft_vsnprintf(output, written + 1, fstr, args);
-	print_string(output, written);
+	print_string(1, output, written);
 	free(output);
 	va_end(args);
 	return (written);

@@ -6,7 +6,7 @@
 #    By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/16 09:43:07 by pleander          #+#    #+#              #
-#    Updated: 2024/05/28 09:20:31 by pleander         ###   ########.fr        #
+#    Updated: 2024/05/31 15:22:03 by pleander         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ CFILES := ft_atoi.c \
 	ft_strdup.c \
 	ft_striteri.c \
 	ft_strjoin.c \
+	ft_strncat.c \
 	ft_strlcat.c \
 	ft_strlcpy.c \
 	ft_strlen.c \
@@ -76,7 +77,7 @@ PRINTF_CFILES := ft_printf/ft_printf.c \
 PRINTF_OBJECTS := $(PRINTF_CFILES:.c=.o)
 
 GNL := get_next_line/libft_get_next_line.o
-GNL_CFILES:= get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
+GNL_CFILES:= get_next_line/get_next_line.c
 GNL_OBJECTS := $(GNL_CFILES:.c=.o)
 
 INCLUDE := include
