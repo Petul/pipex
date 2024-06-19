@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/19 10:46:34 by pleander          #+#    #+#             */
+/*   Updated: 2024/06/19 10:46:59 by pleander         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdlib.h>
-#include "libft/include/ft_printf.h"
 #include "pipex.h"
 
 void	clear_cmd_array(t_cmd *arr)
@@ -27,8 +38,8 @@ void	clear_cmd_array(t_cmd *arr)
 
 size_t	len2d(void **arr)
 {
-	size_t len;
-	
+	size_t	len;
+
 	if (arr == NULL)
 		return (0);
 	len = 0;
@@ -48,26 +59,4 @@ void	free_2d_arr(void **arr, size_t len)
 		i++;
 	}
 	free(arr);
-}
-
-void	print_commands(t_cmd *cmds)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (cmds[i].args != NULL)
-	{
-		ft_printf("cmd: %s args: ", cmds[i].exec_path);
-		j = 0;
-		while (cmds[i].args[j])
-		{
-			ft_printf("\"%s\" ", cmds[i].args[j]);
-			j++;
-		}
-		ft_printf("\n");
-
-
-		i++;
-	}
 }

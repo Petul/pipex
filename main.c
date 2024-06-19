@@ -6,27 +6,27 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:01:30 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/03 09:59:59 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/19 10:55:23 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 #include "libft/include/libft.h"
 
-static char **get_exec_path(char **envp);
+static char	**get_exec_path(char **envp);
 static void	get_args(t_context *con, int argc, char **argv);
 static void	get_args_heredoc(t_context *con, int argc, char **argv);
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_context con;
-	int		retval;
+	t_context	con;
+	int			retval;
 
 	if (argc < 5)
 		return (1);
 	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 		get_args_heredoc(&con, argc, argv);
-	else 
+	else
 		get_args(&con, argc, argv);
 	con.envp = envp;
 	con.path = get_exec_path(envp);
@@ -55,14 +55,15 @@ static void	get_args(t_context *con, int argc, char **argv)
 	con->args = argv + 2;
 }
 
-static char **get_exec_path(char **envp)
+static char	**get_exec_path(char **envp)
 {
 	char	**path;
+
 	while (*envp != NULL && ft_strncmp(*envp, "PATH=", 5))
 		envp++;
 	if (*envp == NULL)
 		path = ft_split("", 0);
-	else 
+	else
 		path = ft_split((*envp) + 5, ':');
 	if (!path)
 		return (NULL);

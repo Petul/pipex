@@ -59,7 +59,7 @@ int		**create_pipes(size_t n_pipes);
 void	delete_pipes(int **pipes, size_t n_pipes);
 int		open_fds(t_fds *fds, t_context *con);
 void	free_2d_arr(void **arr, size_t len);
-void	close_fds(int file_fds[2]);
+void	close_fds(t_fds *fds);
 int		spawn_child(t_fds *fds, t_context *con, t_children *children, t_cmd *cmds);
 char	**argv_split(char *args);
 char	*ft_strcdup(char *s, char *charset);

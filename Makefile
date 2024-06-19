@@ -11,9 +11,18 @@
 # **************************************************************************** #
 
 NAME := pipex
-CC := cc
+CC := gcc
 CFLAGS := -Wall -Wextra -Werror
-CFILES := pipex.c parse_commands.c pipes.c utils.c fd.c child.c main.c
+CFILES := pipex.c \
+	argv_split.c \
+	argv_split_utils.c \
+	parse_commands.c \
+	pipes.c \
+	utils.c \
+	fd.c \
+	child.c \
+	here_doc.c \
+	main.c
 
 LIBFT := libft/libft.a
 

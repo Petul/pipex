@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 08:56:31 by pleander          #+#    #+#             */
-/*   Updated: 2024/05/31 10:31:15 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/19 10:48:45 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include "pipex.h"
 
-int **create_pipes(size_t n_pipes)
+int	**create_pipes(size_t n_pipes)
 {
 	size_t	i;
 	int		**pipes;
@@ -24,7 +24,6 @@ int **create_pipes(size_t n_pipes)
 	if (!pipes)
 		return (NULL);
 	i = 0;
-
 	while (i < n_pipes)
 	{
 		pipes[i] = malloc(sizeof(int) * 2);
@@ -46,7 +45,7 @@ int **create_pipes(size_t n_pipes)
 
 void	delete_pipes(int **pipes, size_t n_pipes)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (i < n_pipes)

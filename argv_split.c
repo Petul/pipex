@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 10:10:07 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/17 14:08:04 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/19 11:33:42 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,14 @@
 #include "libft/include/libft.h"
 #include "pipex.h"
 
-
 static int	free_and_return_zero(char **split)
 {
-	int i;
+	int	i;
 
 	if (!split)
 		return (0);
 	i = 0;
-	while(split[i])
+	while (split[i])
 	{
 		free(split[i]);
 		i++;
@@ -32,7 +31,6 @@ static int	free_and_return_zero(char **split)
 
 static int	handle_quote(char *args, char **split, size_t *i, int c)
 {
-
 	if (args[*i] == '\'')
 		split[c] = ft_strcdup(args + *i + 1, "\'");
 	else if (args[*i] == '\"')
@@ -49,7 +47,7 @@ static void	skip_spaces(char *args, size_t *i)
 		(*i)++;
 }
 
-static int perform_splitting(char *args, int n_args, char **split)
+static int	perform_splitting(char *args, int n_args, char **split)
 {
 	size_t	i;
 	int		c;
@@ -70,16 +68,16 @@ static int perform_splitting(char *args, int n_args, char **split)
 			if (!split[c])
 				free_and_return_zero(split);
 			i += ft_strlen(split[c]) + 1;
-		} 
+		}
 		c++;
-	skip_spaces(args, &i);
+		skip_spaces(args, &i);
 	}
 	return (1);
 }
 
 char	**argv_split(char *args)
 {
-	char **split;
+	char	**split;
 	int		n_args;
 
 	n_args = count_args(args);
