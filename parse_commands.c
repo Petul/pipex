@@ -21,7 +21,7 @@ static char	*find_path(char *p, char **path)
 	char	*check_path;
 	int		path_len;
 
-	if (!p)
+	if (!p || *p == '\0')
 		return (ft_strdup(""));
 	while (*path)
 	{
