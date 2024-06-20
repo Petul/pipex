@@ -15,19 +15,15 @@
 
 static char	**get_exec_path(char **envp);
 static void	get_args(t_context *con, int argc, char **argv);
-static void	get_args_heredoc(t_context *con, int argc, char **argv);
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_context	con;
 	int			retval;
 
-	if (argc < 5)
+	if (argc != 5)
 		return (1);
-	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
-		get_args_heredoc(&con, argc, argv);
-	else
-		get_args(&con, argc, argv);
+	get_args(&con, argc, argv);
 	con.envp = envp;
 	con.path = get_exec_path(envp);
 	if (!con.path)
@@ -35,15 +31,6 @@ int	main(int argc, char **argv, char **envp)
 	retval = pipex(&con);
 	free_2d_arr((void **)con.path, len2d((void **)con.path));
 	return (retval);
-}
-
-static void	get_args_heredoc(t_context *con, int argc, char **argv)
-{
-	con->infile = NULL;
-	con->limiter = argv[2];
-	con->outfile = argv[argc - 1];
-	con->n_cmds = argc - 4;
-	con->args = argv + 3;
 }
 
 static void	get_args(t_context *con, int argc, char **argv)
