@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 10:34:47 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/19 11:12:01 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/20 14:21:49 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ static int	open_heredoc_fds(t_fds *fds, char *outfile)
 
 void	close_fds(t_fds *fds)
 {
-	close(fds->file_fds[0]);
-	close(fds->file_fds[1]);
+	if (fds->file_fds[0] != -1)
+		close(fds->file_fds[0]);
+	if (fds->file_fds[1] != -1)
+		close(fds->file_fds[1]);
 	if (fds->heredoc_pipe)
 		free(fds->heredoc_pipe);
 }

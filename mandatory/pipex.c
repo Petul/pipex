@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:35:34 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/19 10:47:57 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/20 14:32:27 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	pipex(t_context *con)
 	if (con->limiter)
 		read_heredoc(con->limiter, fds.heredoc_pipe[1]);
 	retval = exec_cmds(con, cmds, &fds);
+	close_fds(&fds);
 	clear_cmd_array(cmds);
 	return (retval);
 }
