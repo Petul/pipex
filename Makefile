@@ -12,7 +12,7 @@
 
 NAME := pipex
 CC := gcc
-CFLAGS := -Wall -Wextra -Werror -g
+CFLAGS := -Wall -Wextra -Werror
 CFILES := pipex.c \
 	argv_split.c \
 	argv_split_utils.c \
@@ -24,19 +24,32 @@ CFILES := pipex.c \
 	here_doc.c \
 	main.c
 
+BONUS_CFILES := pipex_bonus.c \
+	argv_split_bonus.c \
+	argv_split_utils_bonus.c \
+	parse_commands_bonus.c \
+	pipes_bonus.c \
+	utils_bonus.c \
+	fd_bonus.c \
+	child_bonus.c \
+	here_doc_bonus.c \
+	main_bonus.c
+
 LIBFT := libft/libft.a
 
 OBJECTS := $(CFILES:.c=.o)
 
-BONUS_CFILES := $(addprefix bonus/, $(CFILES))
+CFILES := $(addprefix mandatory/, $(CFILES))
+OBJECTS := $(CFILES:.c=.o)
+
+BONUS_CFILES := $(addprefix bonus/, $(BONUS_CFILES))
 BONUS_OBJECTS := $(BONUS_CFILES:.c=.o)
 
 .PHONY: all
 all: $(NAME)
 
-$(NAME): bonus
-# $(NAME): $(LIBFT) $(OBJECTS)
-# 	$(CC) $(OBJECTS) $(LIBFT) -o $(NAME)
+$(NAME): $(LIBFT) $(OBJECTS)
+	$(CC) $(OBJECTS) $(LIBFT) -o $(NAME)
 
 $(LIBFT):
 	make -C libft
@@ -48,7 +61,7 @@ $(LIBFT):
 clean:
 	rm -f $(OBJECTS)
 	rm -f $(BONUS_OBJECTS)
-	#rm -f .bonus
+	rm -f .bonus
 	make clean -C libft
 
 .PHONY: fclean
