@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 15:35:34 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/20 14:32:27 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:16:53 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ static int	exec_cmds(t_context *con, t_cmd *cmds, t_fds *fds)
 		children.n_children++;
 	}
 	delete_pipes(fds->pipes, con->n_cmds - 1);
-	close_fds(fds);
 	e_status = wait_for_children(children.child_pids, children.n_children);
 	free(children.child_pids);
 	return (e_status);
