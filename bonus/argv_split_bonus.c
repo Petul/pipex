@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   argv_split.c                                       :+:      :+:    :+:   */
+/*   argv_split_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 10:10:07 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/19 11:33:42 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:54:35 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	perform_splitting(char *args, int n_args, char **split)
 
 	i = 0;
 	c = 0;
-	while (i < ft_strlen(args) && c < n_args)
+	while (i < ft_strlen(args) || c < n_args)
 	{
 		if (args[i] == '\'' || args[i] == '\"')
 		{
