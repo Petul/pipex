@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/24 15:13:19 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/17 15:40:26 by pleander         ###   ########.fr       */
+/*   Created: 2024/06/20 13:52:20 by pleander          #+#    #+#             */
+/*   Updated: 2024/06/20 13:52:31 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # define NAME "pipex"
 # define STR_CMD_NOT_FOUND "command not found"
