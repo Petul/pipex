@@ -16,6 +16,7 @@
 # define NAME "pipex"
 # define STR_CMD_NOT_FOUND "command not found"
 # define CODE_CMD_NOT_FOUND 127
+# define CODE_PERMISSION_DENIED 126
 
 # include <stddef.h>
 # include <sys/wait.h>

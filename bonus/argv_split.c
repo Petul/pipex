@@ -54,7 +54,6 @@ static int	perform_splitting(char *args, int n_args, char **split)
 
 	i = 0;
 	c = 0;
-	skip_spaces(args, &i);
 	while (i < ft_strlen(args) && c < n_args)
 	{
 		if (args[i] == '\'' || args[i] == '\"')
@@ -81,6 +80,8 @@ char	**argv_split(char *args)
 	int		n_args;
 
 	n_args = count_args(args);
+	if (n_args == 0)
+		n_args = 1;
 	split = ft_calloc(n_args + 1, sizeof(char *));
 	if (!split)
 		return (NULL);

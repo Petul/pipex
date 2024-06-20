@@ -20,6 +20,8 @@ char	*ft_strcdup(char *s, char *charset)
 	i = 0;
 	while (s[i] && !ft_strchr(charset, s[i]))
 		i++;
+	while (s[i] == s[i + 1])
+		i++;
 	dup = ft_substr(s, 0, i);
 	if (!dup)
 		return (NULL);

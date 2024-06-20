@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdio.h>
+#include <string.h>
 #include "../libft/include/ft_printf.h"
 #include "pipex.h"
 
@@ -31,10 +32,22 @@ static int	execve_error_handler(t_cmd *cmds, t_children *children)
 	close(STDOUT_FILENO);
 	if (errno == ENOENT)
 	{
-		ft_dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME,
-			cmds[children->n_children].exec_path, STR_CMD_NOT_FOUND);
+		if (cmds[children->n_children].exec_path[0] == '.'
+			|| cmds[children->n_children].exec_path[0] == '/')
+			ft_dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME,
+				cmds[children->n_children].exec_path, strerror(errno));
+		else
+			ft_dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME,
+				cmds[children->n_children].exec_path, STR_CMD_NOT_FOUND);
 		free(children->child_pids);
 		return (CODE_CMD_NOT_FOUND);
+	}
+	else if (errno == EACCES)
+	{
+		ft_dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME,
+			cmds[children->n_children].exec_path, strerror(errno));
+		free(children->child_pids);
+		return (CODE_PERMISSION_DENIED);
 	}
 	else
 		perror(NAME);

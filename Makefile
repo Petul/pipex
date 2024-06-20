@@ -12,7 +12,7 @@
 
 NAME := pipex
 CC := gcc
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -g
 CFILES := pipex.c \
 	argv_split.c \
 	argv_split_utils.c \
@@ -34,8 +34,9 @@ BONUS_OBJECTS := $(BONUS_CFILES:.c=.o)
 .PHONY: all
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJECTS)
-	$(CC) $(OBJECTS) $(LIBFT) -o $(NAME)
+$(NAME): bonus
+# $(NAME): $(LIBFT) $(OBJECTS)
+# 	$(CC) $(OBJECTS) $(LIBFT) -o $(NAME)
 
 $(LIBFT):
 	make -C libft

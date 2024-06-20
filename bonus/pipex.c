@@ -18,21 +18,6 @@
 static int	exec_cmds(t_context *con, t_cmd *cmds, t_fds *fds);
 static int	wait_for_children(int *pid, size_t n_forks);
 
-// pid_t my_fork(void)
-// {
-// 	static int i = 0;
-//
-// 	 if (i == 1)
-// 	 {
-// 	 	i++;
-// 	 	return (-1);
-// 	 }
-// 	 i++;
-// 	 return (fork());
-// }
-//
-// #define fork my_fork
-//
 int	pipex(t_context *con)
 {
 	t_fds	fds;
