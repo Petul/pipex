@@ -6,7 +6,7 @@
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:31:13 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/19 11:30:52 by pleander         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:50:35 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,28 @@ static int	child_error_return(int **pipes, t_context *con,
 	return (EXIT_FAILURE);
 }
 
-static int	execve_error_handler(t_cmd *cmds, t_children *children)
+static int	execve_error_handler(t_cmd *cmds, t_children *child, t_context *con)
 {
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	if (errno == ENOENT)
 	{
-		if (cmds[children->n_children].exec_path[0] == '.'
-			|| cmds[children->n_children].exec_path[0] == '/')
+		if (cmds[child->n_children].exec_path[0] == '.'
+			|| cmds[child->n_children].exec_path[0] == '/'
+			|| *(con->path) == NULL)
 			ft_dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME,
-				cmds[children->n_children].exec_path, strerror(errno));
+				cmds[child->n_children].exec_path, strerror(errno));
 		else
 			ft_dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME,
-				cmds[children->n_children].exec_path, STR_CMD_NOT_FOUND);
-		free(children->child_pids);
+				cmds[child->n_children].exec_path, STR_CMD_NOT_FOUND);
+		free(child->child_pids);
 		return (CODE_CMD_NOT_FOUND);
 	}
 	else if (errno == EACCES)
 	{
 		ft_dprintf(STDERR_FILENO, "%s: %s: %s\n", NAME,
-			cmds[children->n_children].exec_path, strerror(errno));
-		free(children->child_pids);
+			cmds[child->n_children].exec_path, strerror(errno));
+		free(child->child_pids);
 		return (CODE_PERMISSION_DENIED);
 	}
 	else
@@ -76,6 +77,6 @@ int	spawn_child(t_fds *fds, t_context *con, t_children *children, t_cmd *cmds)
 	close_fds(fds);
 	if (execve(cmds[children->n_children].exec_path,
 			cmds[children->n_children].args, con->envp) == -1)
-		return (execve_error_handler(cmds, children));
+		return (execve_error_handler(cmds, children, con));
 	exit(EXIT_FAILURE);
 }
