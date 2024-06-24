@@ -22,12 +22,18 @@ int	main(int argc, char **argv, char **envp)
 	t_context	con;
 	int			retval;
 
-	if (argc < 5)
-		return (1);
-	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+	if (ft_strncmp(argv[1], "here_doc", 9) == 0)
+	{
+		if (argc < 6)
+			return (1);
 		get_args_heredoc(&con, argc, argv);
+	}
 	else
+	{
+		if (argc < 5)
+			return (1);
 		get_args(&con, argc, argv);
+	}
 	con.envp = envp;
 	con.path = get_exec_path(envp);
 	if (!con.path)
