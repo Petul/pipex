@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pleander <pleander@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/17 14:56:25 by pleander          #+#    #+#             */
-/*   Updated: 2024/06/19 11:09:07 by pleander         ###   ########.fr       */
+/*   Created: 2024/06/24 11:27:23 by pleander          #+#    #+#             */
+/*   Updated: 2024/06/24 11:27:25 by pleander         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,14 @@ static int	write_content_to_fd(t_list *lst, int fd)
 	return (1);
 }
 
+static int	max(int a, int b)
+{
+	if (a > b)
+		return (a);
+	else
+		return (b);
+}
+
 void	read_heredoc(char *limiter, int write_fd)
 {
 	t_list	*line;
@@ -38,8 +46,9 @@ void	read_heredoc(char *limiter, int write_fd)
 		close(write_fd);
 		return ;
 	}
-	while (ft_strncmp((char *)ft_lstlast(line)->content,
-			limiter, ft_strlen(limiter)) != 0)
+	while (ft_strncmp((char *)ft_lstlast(line)->content, limiter,
+			max(ft_strlen(limiter),
+				ft_strlen((char *)ft_lstlast(line)->content) - 1)) != 0)
 	{
 		ft_lstadd_back(&line, ft_lstnew(get_next_line(STDIN_FILENO)));
 		if (!ft_lstlast(line)->content)
