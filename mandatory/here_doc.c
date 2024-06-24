@@ -43,11 +43,7 @@ void	read_heredoc(char *limiter, int write_fd)
 	{
 		ft_lstadd_back(&line, ft_lstnew(get_next_line(STDIN_FILENO)));
 		if (!ft_lstlast(line)->content)
-		{
-			ft_lstclear(&line, &free);
-			close(write_fd);
-			return ;
-		}
+			break ;
 	}
 	write_content_to_fd(line, write_fd);
 	close(write_fd);
