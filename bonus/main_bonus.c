@@ -22,10 +22,8 @@ int	main(int argc, char **argv, char **envp)
 	t_context	con;
 	int			retval;
 
-	if (ft_strncmp(argv[1], "here_doc", 9) == 0)
+	if (argc >= 6 && ft_strncmp(argv[1], "here_doc", 9) == 0)
 	{
-		if (argc < 6)
-			return (1);
 		get_args_heredoc(&con, argc, argv);
 	}
 	else
