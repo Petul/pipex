@@ -1,6 +1,7 @@
 infile
 outfile
 pipex
+libft/.gitignore
 *.swp
 *.swo
 *.o
